@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   dropdown_button2: ^2.3.9
+  get: ^4.7.2
+
 
   flutter:
     sdk: flutter
@@ -37,6 +39,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.17
+  flutter_bloc: ^9.1.0
+  dartz: ^0.10.1
 
 
 dev_dependencies:
@@ -63,21 +67,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/images/start_image.png
-     - assets/images/flag_Images.png
-     - assets/Icons/Plus - Iconly Pro.png
-     - assets/images/Image_empty_screen1.svg
-     - assets/images/Image_empty_screen1.svg
-     - assets/images/empty_tasks.png
-     - assets/Icons/Arrow_back.png
+    - assets/images/start_image.png
+    - assets/images/flag_Images.png
+    - assets/Icons/PlusIconPro.png
+    - assets/images/Image_empty_screen1.svg
+    - assets/images/Image_empty_screen1.svg
+    - assets/images/empty_tasks.png
+    - assets/Icons/Arrow_back.png
 
-     - assets/Icons/home1.png
-     - assets/Icons/person1.png
-     - assets/Icons/bag1.png
-     - assets/Icons/Arrow_down.png
-     - assets/Icons/person_updat.png
-     - assets/Icons/settings.png
-     - assets/Icons/Arrow_right.png
+    - assets/Icons/home1.png
+    - assets/Icons/person1.png
+    - assets/Icons/bag1.png
+    - assets/Icons/Arrow_down.png
+    - assets/Icons/person_update.png
+    - assets/Icons/settings.png
+    - assets/Icons/Arrow_right.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -92,14 +96,14 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-       - family: Lexend_Deca
-         fonts:
-           - asset: assets/fonts/Lexend_Deca/LexendDeca-Thin.ttf
-           - asset: assets/fonts/Lexend_Deca/LexendDeca-SemiBold.ttf
-           - asset: assets/fonts/Lexend_Deca/LexendDeca-Regular.ttf
-           - asset: assets/fonts/Lexend_Deca/LexendDeca-Medium.ttf
-           - asset: assets/fonts/Lexend_Deca/LexendDeca-Black.ttf
-           - asset: assets/fonts/Lexend_Deca/LexendDeca-Light.ttf
+    - family: Lexend_Deca
+      fonts:
+        - asset: assets/fonts/Lexend_Deca/LexendDeca-Thin.ttf
+        - asset: assets/fonts/Lexend_Deca/LexendDeca-SemiBold.ttf
+        - asset: assets/fonts/Lexend_Deca/LexendDeca-Regular.ttf
+        - asset: assets/fonts/Lexend_Deca/LexendDeca-Medium.ttf
+        - asset: assets/fonts/Lexend_Deca/LexendDeca-Black.ttf
+        - asset: assets/fonts/Lexend_Deca/LexendDeca-Light.ttf
 
   #   - family: Trajan Pro
   #     fonts:

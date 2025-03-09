@@ -1,20 +1,24 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/features/AddTask/logic/cubit/add_task_cubit.dart';
+import 'package:todo/features/AddTask/logic/cubit/add_task_state.dart';
 abstract class fonts {
   static const String lexendDeca = 'Lexend_Deca';
 }
 abstract class Iconss {
   static const String _baseUrl = "assets/Icons/";
-  static const String home_icon = "${_baseUrl}home_icon.svg";
-  static const String bag_icon = "${_baseUrl}bag_icon.svg";
-  static const String person_icon = "${_baseUrl}Person.svg";
-  static const String plus_icon = "${_baseUrl}Plus - Iconly Pro.png";
+  static const String plus_icon = "${_baseUrl}PlusIconPro.png";
   static const String home1 = "${_baseUrl}home1.png";
   static const String person1 = "${_baseUrl}person1.png";
   static const String bag1 = "${_baseUrl}bag1.png";
   static const String arrow_down = "${_baseUrl}Arrow_down.png";
-  static const String person_update = "${_baseUrl}person_updat.png";
+  static const String person_update = "${_baseUrl}person_update.png";
   static const String settings = "${_baseUrl}settings.png";
+}
+abstract class AppColors{
+  static const Color greenColor = Color(0xff149954);
+
 }
 
 class CustomDropdownButton extends StatefulWidget {
@@ -27,7 +31,6 @@ class CustomDropdownButton extends StatefulWidget {
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   String? selectedValue;
 
-  // قائمة العناصر بالأيقونات
   final List<Map<String, dynamic>> items = [
     {"label": "Home", "icon": Iconss.home1, "color": Color(0xffFFE4F2)},
     {"label": "Work", "icon": Iconss.bag1, "color": Color(0xff372525)},
@@ -57,7 +60,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container_Icon(
+                    con(
                       color: item["color"],
                       iconPath: item["icon"],
                     ),
@@ -122,33 +125,32 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   }
 }
 
-class Container_Icon extends StatelessWidget {
-  const Container_Icon({super.key, required this.color, required this.iconPath});
-  final Color color;
-  final String iconPath;
-
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(14),
-
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.asset(iconPath, fit: BoxFit.contain),
-      ),
-    );
-  }
-}
+// class Container_Icon extends StatelessWidget {
+//   const Container_Icon({super.key, required this.color, required this.iconPath});
+//   final Color color;
+//   final String iconPath;
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//     return Container(
+//       width: 50,
+//       height: 50,
+//       decoration: BoxDecoration(
+//         color: color,
+//         borderRadius: BorderRadius.circular(14),
+//       ),
+//       child: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: Image.asset(iconPath, fit: BoxFit.contain),
+//       ),
+//     );
+//   }
+// }
 class UserData_Container extends StatelessWidget {
   const UserData_Container({super.key, required this.Name});
-  final String Name;
+  final String? Name;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -170,7 +172,7 @@ class UserData_Container extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Hello!",style: TextStyle(color: Colors.black,fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
-                  Text(Name,style: TextStyle(color: Colors.black,fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w500),),
+                  Text(Name??"No Name",style: TextStyle(color: Colors.black,fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w500),),
                 ],
               ),
 
@@ -179,13 +181,14 @@ class UserData_Container extends StatelessWidget {
     );
   }
 }
+ bool light = false;
+
 class switchh extends StatefulWidget {
   const switchh({super.key});
 
   @override
   State<switchh> createState() => _switchhState();
 }
-bool light = false;
 class _switchhState extends State<switchh> {
   @override
   Widget build(BuildContext context) {
@@ -209,49 +212,21 @@ class _switchhState extends State<switchh> {
     );
   }
 }
-class chackbox extends StatefulWidget {
-  const chackbox({super.key});
-
-  @override
-  State<chackbox> createState() => _chackboxState();
-}
-bool sign = false;
-class _chackboxState extends State<chackbox> {
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-      scaleX: 1.5 ,
-      scaleY: 1.5,
-      child: Checkbox(value: sign, onChanged: (value) {
-        setState(() {
-          sign = value!;
-        },);
-      },
-        checkColor: Colors.white,
-       activeColor: Color(0xff149954),
-        side: BorderSide(color: Color(0xff6E6A7C)),
-
-
-      ),
-    );
-  }
-}
-
 class Listview extends StatelessWidget {
   const Listview({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      height: 90,
       child: ListView.builder(itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
           child: Container(
               width: 234,
               height: 90,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(20),
                 color: Color(0xff1D1C1B),
               ),
               child:Padding(
@@ -294,8 +269,13 @@ class BigContenar_home2 extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Your today’s tasks\n almost done!",style: TextStyle(color: Colors.white,fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text("Your today’s tasks\n almost done!",style: TextStyle(color: Colors.white,fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),),
+              ),
               SizedBox(height: 10,),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0,right: 8.0),
@@ -379,108 +359,121 @@ class InprogressContiner extends StatelessWidget {
 }
 
 class TaskGroupsList extends StatelessWidget {
-  const TaskGroupsList({super.key});
+   TaskGroupsList({super.key,  });
 
-  @override
+   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 335,
-            height: 63,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  con(color: Color(0xffCEEBDC), iconPath: Iconss.person1,),
-                  SizedBox(width: 10,),
-                  Text("Personal Task",style: TextStyle(color: Color(0xff24252C),fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
-                  Spacer(),
-                  Container(
-                    width: 14,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color(0xffCEEBDC),
+     var cubit = AddTaskCubit.get(context);
 
-                    ),
-                    child: Center(child: Text("5",style: TextStyle(color: Color(0xff149954),fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),)),
-                  ),
-                ],
-              ),
-            ) ,
-          ),
-          SizedBox(height: 10,),
-          Container(
-            width: 335,
-            height: 63,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  con(color: Color(0xffFFE4F2), iconPath: Iconss.home1,),
-                  SizedBox(width: 10,),
-                  Text("Home Task",style: TextStyle(color: Color(0xff24252C),fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
-                  Spacer(),
-                  Container(
-                    width: 14,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color(0xffFFE4F2),
+     return BlocBuilder<AddTaskCubit, AddTaskState>(
+         builder: (context, state) {
+           if(state is AddTaskLoading){
+             return Center(child: CircularProgressIndicator(),);
 
-                    ),
-                    child: Center(child: Text("5",style: TextStyle(color: Color(0xff149954),fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),)),
-                  ),
-                ],
-              ),
-            ) ,
-          ),
-          SizedBox(height: 10,),
-          Container(
-            width: 335,
-            height: 63,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  con(color: Color(0xff372525), iconPath: Iconss.bag1,),
-                  SizedBox(width: 10,),
-                  Text("Work Task",style: TextStyle(color: Color(0xff24252C),fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
-                  Spacer(),
-                  Container(
-                    width: 14,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color(0xff14995426),
+           }else if(state is AddTaskSuccess){
+             return Center(
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Container(
+                     width: 335,
+                     height: 63,
+                     decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.circular(20),
+                     ),
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           con(color: Color(0xffCEEBDC), iconPath: Iconss.person1,),
+                           SizedBox(width: 10,),
 
-                    ),
-                    child: Center(child: Text("3",style: TextStyle(color: Color(0xff372525),fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),)),
-                  ),
-                ],
-              ),
-            ) ,
-          ),
-          SizedBox(height: 10,),
+                           Text(cubit.addTaskRepo.addTaskList[cubit.addTaskRepo.addTaskList.length-1].titleTask,style: TextStyle(color: Color(0xff24252C),fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
+                           Spacer(),
+                           Container(
+                             width: 14,
+                             height: 15,
+                             decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(5),
+                               color: Color(0xffCEEBDC),
 
-        ],
-      ),
-    );
+                             ),
+                             child: Center(child: Text(cubit.addTaskRepo.addTaskList.length.toString(),style: TextStyle(color: Color(0xff149954),fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),)),
+                           ),
+                         ],
+                       ),
+                     ) ,
+                   ),
+                   SizedBox(height: 10,),
+                   Container(
+                     width: 335,
+                     height: 63,
+                     decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.circular(20),
+                     ),
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           con(color: Color(0xffFFE4F2), iconPath: Iconss.home1,),
+                           SizedBox(width: 10,),
+                           Text("Home Task",style: TextStyle(color: Color(0xff24252C),fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
+                           Spacer(),
+                           Container(
+                             width: 14,
+                             height: 15,
+                             decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(5),
+                               color: Color(0xffFFE4F2),
+
+                             ),
+                             child: Center(child: Text("5",style: TextStyle(color: Color(0xff149954),fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),)),
+                           ),
+                         ],
+                       ),
+                     ) ,
+                   ),
+                   SizedBox(height: 10,),
+                   Container(
+                     width: 335,
+                     height: 63,
+                     decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.circular(20),
+                     ),
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           con(color: Color(0xff372525), iconPath: Iconss.bag1,),
+                           SizedBox(width: 10,),
+                           Text("Work Task",style: TextStyle(color: Color(0xff24252C),fontSize: 14,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w300),),
+                           Spacer(),
+                           Container(
+                             width: 14,
+                             height: 15,
+                             decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(5),
+                               color: Color(0xff14995426),
+
+                             ),
+                             child: Center(child: Text("3",style: TextStyle(color: Color(0xff372525),fontSize: 12,fontFamily: fonts.lexendDeca,fontWeight: FontWeight.w400),)),
+                           ),
+                         ],
+                       ),
+                     ) ,
+                   ),
+                   SizedBox(height: 10,),
+
+                 ],
+               ),
+             );
+           }else{
+             return Center(child: Text("Error"),);
+           }
+         });
   }
 }
 class con extends StatelessWidget {
@@ -495,7 +488,7 @@ class con extends StatelessWidget {
       height: 35,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
 
       ),
       child: Padding(

@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:todo/wedigt/Button_wedgit.dart';
-import 'package:todo/wedigt/constant.dart';
-import 'package:todo/wedigt/images_wedget.dart';
-import 'package:todo/wedigt/text_wedgit.dart';
+import 'package:get/get.dart';
+import 'package:todo/core/resources_manager/Button_Widget.dart';
+import 'package:todo/core/resources_manager/constant.dart';
+import 'package:todo/core/resources_manager/Images_Widget.dart';
+import 'package:todo/core/resources_manager/Text_Widget.dart';
+import 'package:todo/features/Onboarding/options_screen.dart';
+import 'package:todo/features/profile/data/repo/profile_repo.dart';
+
 class HomeScreen1 extends StatefulWidget {
-   HomeScreen1({super.key});
+  const HomeScreen1({super.key});
+
   @override
   State<HomeScreen1> createState() => _HomeScreen1State();
 }
+
 class _HomeScreen1State extends State<HomeScreen1> {
   @override
   Widget build(BuildContext context) {
-    var info = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    String name1 = info["name"];
+    String profileName = userData[userData.length - 1].name.toString();
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -24,21 +30,22 @@ class _HomeScreen1State extends State<HomeScreen1> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, "OptionsScreen",arguments: name1);
-                      },
-                      child: UserData_Container(Name: name1,)),
+                    onTap: () {
+                      Get.to(OptionsScreen());
+                    },
+                    child: UserData_Container(Name: profileName),
+                  ),
                   SizedBox(
                     width: 24,
                     height: 24,
-                    child: PlusButton(name: name1,),
-                  )
+                    child: PlusButton(name: profileName),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 70,),
+            SizedBox(height: 70),
             textHome1(),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
             ImageEmptyScreen(),
           ],
         ),

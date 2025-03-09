@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'constant.dart';
+import 'package:todo/core/resources_manager/constant.dart';
 class startText extends StatelessWidget {
   const startText({super.key});
 
@@ -48,7 +47,6 @@ class TextForm extends StatefulWidget {
   @override
   State<TextForm> createState() => _TextFormState();
 }
-
 class _TextFormState extends State<TextForm> {
   @override
   Widget build(BuildContext context) {
@@ -115,16 +113,21 @@ class textHome1 extends StatelessWidget {
     );
   }
 }
+
 class textFormefield extends StatelessWidget {
-  textFormefield({super.key, required this.hintText, required this.label,});
+  textFormefield({super.key, required this.hintText, required this.label, required this.controller,});
+  final TextEditingController controller ;
   final String hintText;
   final String label;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       maxLines: null,
       minLines:1,
       decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+
 
         filled: true,
         fillColor: Colors.white,
