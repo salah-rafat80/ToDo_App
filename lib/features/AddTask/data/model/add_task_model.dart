@@ -1,5 +1,6 @@
  class AddTaskModel {
   String titleTask;
   String description;
-  AddTaskModel({required this.titleTask, required this.description});
+  final  DateTime createdAt;
+  AddTaskModel( {required this.titleTask, required this.description, required this.createdAt});
 }

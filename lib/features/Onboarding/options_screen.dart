@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/core/resources_manager/Button_Widget.dart';
 import 'package:todo/core/resources_manager/constant.dart';
-import 'package:todo/features/Onboarding/options_screen.dart';
 import 'package:todo/features/profile/data/repo/profile_repo.dart';
 import 'package:todo/features/profile/view/profile_screen.dart';
 import 'package:todo/features/settings/views/settings_screen.dart';
@@ -12,7 +11,7 @@ class OptionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String profileName = userData[userData.length - 1].name.toString();
+    String profileName = ProfileRepo.getinstance().userData[ProfileRepo.getinstance().userData.length - 1].name.toString();
 
     return SafeArea(
       child: Scaffold(

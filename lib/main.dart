@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:todo/features/AddTask/logic/cubit/add_task_cubit.dart';
-import 'package:todo/features/Onboarding/start_screen.dart';
+import 'package:todo/core/resources_manager/constant.dart';
+import 'package:todo/features/Onboarding/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddTaskCubit>(
-      create: (context) => AddTaskCubit(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
       child: GetMaterialApp(
         theme: ThemeData(useMaterial3: true),
         debugShowCheckedModeBanner: false,
-        color: Color(0xffF3F5F4),
-        home: StartScreen(),
+        color: AppColors.primaryColor,
+        home: SplashScreen(),
       ),
     );
   }

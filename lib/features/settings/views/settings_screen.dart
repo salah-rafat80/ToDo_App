@@ -5,9 +5,14 @@ import 'package:todo/core/resources_manager/constant.dart';
 import 'package:todo/features/settings/manegar/settings_cubit/settings_cubit.dart';
 import 'package:todo/features/settings/manegar/settings_cubit/settings_state.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -72,8 +77,9 @@ class SettingsScreen extends StatelessWidget {
                             child: Checkbox(
                               value: SettingsCubit.get(context).sign,
                               onChanged: (value) {
-                                SettingsCubit.get(context).sign =
-                                    value ?? SettingsCubit.get(context).sign;
+                                    setState(() {
+                                      SettingsCubit.get(context).sign =
+                                      value ?? SettingsCubit.get(context).sign;                                    });
                               },
                               checkColor: Colors.white,
                               activeColor: Color(0xff149954),

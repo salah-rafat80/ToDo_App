@@ -9,13 +9,17 @@ import 'package:todo/features/AddTask/logic/cubit/add_task_state.dart';
   static AddTaskCubit get(context) => BlocProvider.of(context);
   TextEditingController TaskNameController = TextEditingController();
   TextEditingController TaskDescriptionController = TextEditingController();
-  AddTaskRepo addTaskRepo=AddTaskRepo();
+  AddTaskRepo addTaskRepo= AddTaskRepo.getinstance();
+
   void addTask({required AddTaskModel task})async{
     emit(AddTaskLoading());
     var response= await addTaskRepo.addTask(task: task);
     response.fold((l) {
-      emit(AddTaskError());} , (r) { emit(AddTaskSuccess());
+      emit(AddTaskError(message: l));} , (r) { emit(AddTaskSuccess());
     });
+  }
+  void getTasks(){
+   emit(AddTaskSuccess());
 
   }
 }

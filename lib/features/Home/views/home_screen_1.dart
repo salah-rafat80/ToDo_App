@@ -17,7 +17,7 @@ class HomeScreen1 extends StatefulWidget {
 class _HomeScreen1State extends State<HomeScreen1> {
   @override
   Widget build(BuildContext context) {
-    String profileName = userData[userData.length - 1].name.toString();
+    String profileName = ProfileRepo.getinstance().userData[ProfileRepo.getinstance().userData.length - 1].name.toString();
 
     return SafeArea(
       child: Scaffold(

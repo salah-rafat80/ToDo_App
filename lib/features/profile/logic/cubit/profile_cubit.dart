@@ -11,7 +11,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   TextEditingController nameController = TextEditingController();
 
 
-  ProfileRepo profileRepo = ProfileRepo();
+  ProfileRepo profileRepo = ProfileRepo.getinstance();
   void OnSaveProfile({required UserdataModel userdata}) async{
     emit(ProfileLoadingState());
     var response = await profileRepo.saveProfile(userdata: UserdataModel(name: nameController.text));

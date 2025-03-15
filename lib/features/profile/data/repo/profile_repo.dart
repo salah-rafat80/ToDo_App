@@ -1,9 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:todo/features/profile/data/profile_model/profile_model.dart';
-List<UserdataModel> userData = [];
 
  class ProfileRepo{
-  Future<Either<String, void>> saveProfile({required UserdataModel userdata})async{
+   ProfileRepo._internal();
+  static ProfileRepo instance = ProfileRepo._internal();
+   static getinstance (){
+     return instance;
+ }
+   List<UserdataModel> userData = [];
+
+   Future<Either<String, void>> saveProfile({required UserdataModel userdata})async{
     try{
 
 
