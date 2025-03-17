@@ -79,7 +79,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  cubit.addTaskRepo.addTaskList.length
+                                  "cubit.addTaskRepo.addTaskList.length"
                                       .toString(),
                                   style: MyTextStyle.greenS12W4,
                                 ),
@@ -89,7 +89,7 @@ class HomeScreen2 extends StatelessWidget {
                         ],
                       ),
                     ),
-                    TaskGroupsList(),
+                    // TaskGroupsList(),
                   ],
                 ),
               ),

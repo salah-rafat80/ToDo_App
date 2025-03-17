@@ -12,19 +12,21 @@ class RegisterCubit extends Cubit<RegisterState> {
   TextEditingController ConfirmPasswordController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  AuthRepo authRepo = AuthRepo();
+  AuthRepo authRepo = AuthRepo.getinstance();
 
-  void register(UserModel u) async{
+  void register(UserModel u) async {
     emit(RegisterLoading());
-    await Future.delayed(Duration(seconds: 1));
-    var response =  authRepo.register(user: u);
-      response.fold(
-        (l) {
-          emit(RegisterError(message: l));
-        },
-        (r) {
-          emit(RegisterSuccess());
-        },
-      );
+    var response =await authRepo.register(
+      name: nameController.text,
+      password: passwordController.text,
+    );
+    response.fold(
+      (l) {
+        emit(RegisterError(message: l));
+      },
+      (r) {
+        emit(RegisterSuccess(message: r));
+      },
+    );
   }
 }

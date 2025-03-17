@@ -1,29 +1,36 @@
 import 'package:dartz/dartz.dart';
-import 'package:todo/features/Auth/register/data/model/register_model.dart';
-class AuthRepo {
-List <UserModel> users = [];
-// final APIHelper _APIHelper = APIHelper();
-Either<String,void> register({ required UserModel user}) {
-  // void fetchData() async {
-  //   try {
-  //     final response = await APIHelper().get('/users');
-  //     print(response.data);
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
+import 'package:todo/core/resources_manager/network/api_helper.dart';
+import 'package:todo/core/resources_manager/network/api_response.dart';
+import 'package:todo/core/resources_manager/network/end_points.dart';
 
-  try {
-    if(user.password != user.confirmpassword){
-      return left("password doesn't match");
-    };
-    users.add(user);
-    return right(0);
-  }catch(e){
-    return left(e.toString());
+class AuthRepo {
+  AuthRepo._internal();
+
+  static AuthRepo instance = AuthRepo._internal();
+
+  static getinstance() {
+    return instance;
   }
 
-}
+  ApiHelper apiHelper = ApiHelper();
 
+  Future<Either<String, String>> register({
+    required String name,
+    required String password,
+  }) async {
 
+     ApiResponse response = await apiHelper.postRequest(
+        url: EndPoints.register,
+        data: {"username": name, "password": password},
+       isAuthorized: false,
+
+      );
+
+      if (response.status ) {
+        return right(response.message);
+      }else{
+        return left(response.message);
+      }
+
+  }
 }

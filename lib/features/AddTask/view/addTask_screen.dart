@@ -9,6 +9,7 @@ import 'package:todo/core/resources_manager/Text_Widget.dart';
 import 'package:todo/features/AddTask/data/model/add_task_model.dart';
 import 'package:todo/features/AddTask/logic/cubit/add_task_cubit.dart';
 import 'package:todo/features/AddTask/logic/cubit/add_task_state.dart';
+import 'package:todo/features/Home/views/home_screen_1.dart';
 import 'package:todo/features/Home/views/home_screen_2.dart';
 
 class AddTaskScreen extends StatelessWidget {
@@ -98,7 +99,6 @@ class AddTaskScreen extends StatelessWidget {
                       text: 'Save',
                       onPress: () {
                         var task = AddTaskModel(
-                          createdAt: DateTime.now(),
                           titleTask: cubit.TaskNameController.text,
                           description: cubit.TaskDescriptionController.text,
                         );
@@ -111,7 +111,7 @@ class AddTaskScreen extends StatelessWidget {
                 listener: (BuildContext context, AddTaskState state) {
                   print(state.toString());
                   if (state is AddTaskSuccess) {
-                    Get.to(HomeScreen2());
+                    Get.to(HomeScreen1());
                   } else if (state is AddTaskError) {
                     ScaffoldMessenger.of(
                       context,

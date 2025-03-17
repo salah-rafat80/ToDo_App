@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/features/AddTask/logic/cubit/add_task_cubit.dart';
 import 'package:todo/features/AddTask/logic/cubit/add_task_state.dart';
@@ -47,6 +52,13 @@ abstract class MyTextStyle {
     fontFamily: fonts.lexendDeca,
     fontWeight: MyFontWeight.w4,
   );
+  static TextStyle blackS14W2 = TextStyle(
+    color: AppColors.darkColor,
+    fontSize: MyFontSizes.s14,
+    fontFamily: fonts.lexendDeca,
+    fontWeight: MyFontWeight.w9,
+  );
+
 }
 
 abstract class MyFontSizes {
@@ -462,104 +474,202 @@ class InprogressContiner extends StatelessWidget {
   }
 }
 
-class TaskGroupsList extends StatelessWidget {
-  TaskGroupsList({super.key});
+
+class AnimatedHangingLights extends StatefulWidget {
+  @override
+  _AnimatedHangingLightsState createState() => _AnimatedHangingLightsState();
+}
+
+class _AnimatedHangingLightsState extends State<AnimatedHangingLights> with SingleTickerProviderStateMixin {
+  List<double> opacities = List.generate(12, (index) => 0.3);
+  final List<Color> colors = [Colors.cyan, Colors.pink, Colors.green, Colors.blue];
+  final Random random = Random();
+  late AnimationController _controller;
+  late Animation<double> _swingAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // تشغيل الوميض العشوائي لكل لمبة
+    for (int i = 0; i < opacities.length; i++) {
+      _startBlinking(i);
+    }
+
+    // إعداد التأرجح للفانوس
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _swingAnimation = Tween<double>(begin: -pi / 8, end: pi / 8).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  void _startBlinking(int index) {
+    Future.delayed(Duration(milliseconds: random.nextInt(1000) + 500), () {
+      Timer.periodic(Duration(milliseconds: random.nextInt(800) + 500), (timer) {
+        setState(() {
+          opacities[index] = opacities[index] == 1.0 ? 0.2 : 1.0;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    AddTaskCubit.get(context).getTasks();
-    return BlocConsumer<AddTaskCubit, AddTaskState>(
-      listener: (context, state) {},
-      builder: (context1, state) {
-        var cubit = AddTaskCubit.get(context1);
-        return Center(
-          child: SizedBox(
-            height: 375,
-            width: 340,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                final task = cubit.addTaskRepo.addTaskList[index];
-                return Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Container(
-                    width: 335,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(color: Color(0xff000000).withOpacity(0.25), blurRadius: 4, offset: Offset(0, 4),spreadRadius: 0),
-                      ],
-                      color: AppColors.litegreenColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12.0, top: 13.0),
-                              child: Text(
-                                cubit.addTaskRepo.addTaskList[index].titleTask,
-                                style: TextStyle(
-                                  color: AppColors.textColor,
-                                  fontSize: 16.sp,
-                                  fontFamily: fonts.lexendDeca,
-                                  fontWeight: MyFontWeight.w4,
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 13.0, top: 13.0),
-                              child: SizedBox(
-                                height: 35,
-                                width: 90,
-                                child: Text(
-                                  DateFormat('dd/MM/yyyy \n hh:mm a').format(task.createdAt),textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 14.sp,
-                                    fontFamily: fonts.lexendDeca,
-                                    fontWeight: MyFontWeight.w4,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: SizedBox(
-                            width: 180.w,
-                            child: Text(
-                              cubit.addTaskRepo.addTaskList[index].description,
-                              maxLines: 2,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: AppColors.textColor2,
-                                fontSize: 15.sp,
-                                fontFamily: fonts.lexendDeca,
-                                fontWeight: MyFontWeight.w3,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        // حساب إحداثيات الفانوس
+        double centerX = 175; // نصف عرض الـ CustomPaint (400)
+        double baseY = 200 / 3 + 30; // الموضع الرأسي الأساسي
+        double swingOffset = 30 * sin(_swingAnimation.value);
+        double lanternX = centerX + swingOffset;
+        double lanternY = baseY + 50 * cos(_swingAnimation.value);
+        Color glowColor = colors[(DateTime.now().second % 4)];
+
+        return Stack(
+          children: [
+            CustomPaint(
+              size: Size(400, 200),
+              painter: HangingLightsPainter(opacities, colors, _swingAnimation.value),
+            ),
+
+            Positioned(
+              left: lanternX - 15, // تعويض نصف عرض الصورة
+              top: lanternY - 15, // تعويض نصف ارتفاع الصورة
+              child: Stack(
+                children: [
+                  // الطبقة الأولى: توهج قوي
+                  ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: SvgPicture.asset(
+                      'assets/images/ramadan.svg',
+                      width: 30,
+                      height: 50,
+                      color: glowColor.withOpacity(0.3),
                     ),
                   ),
-                );
-              },
-              itemCount: cubit.addTaskRepo.addTaskList.length,
+                  // الطبقة الثانية: توهج متوسط
+                  ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: SvgPicture.asset(
+                      'assets/images/ramadan.svg',
+                      width: 30,
+                      height: 50,
+                      color: glowColor.withOpacity(0.5),
+                    ),
+                  ),
+                  // الصورة الأصلية
+                  SvgPicture.asset(
+                    'assets/images/ramadan.svg',
+                    width: 30,
+                    height: 50,
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+class HangingLightsPainter extends CustomPainter {
+  final List<double> opacities;
+  final List<Color> colors;
+  final double swingAngle;
+  final int numBulbs = 10;
+
+  HangingLightsPainter(this.opacities, this.colors, this.swingAngle);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint wirePaint = Paint()
+      ..color = Colors.grey[800]!
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke;
+
+    Path path = Path();
+    double midX = size.width / 2;
+    double midY = size.height / 3;
+
+    // رسم السلك الرئيسي المنحني
+    path.moveTo(0, midY);
+    path.quadraticBezierTo(midX / 2, midY + 30, midX, midY + 30);
+    path.quadraticBezierTo(midX + (midX / 2), midY + 30, size.width, midY);
+
+    canvas.drawPath(path, wirePaint);
+
+    // توزيع اللمبات مع تعليقها على السلك
+    PathMetrics pathMetrics = path.computeMetrics();
+    PathMetric pathMetric = pathMetrics.first;
+
+    for (int i = 0; i < numBulbs; i++) {
+      double t = i / (numBulbs - 1);
+      Tangent? tangent = pathMetric.getTangentForOffset(pathMetric.length * t);
+
+      if (tangent != null) {
+        Offset wirePosition = tangent.position;
+        double hangingHeight = 25;
+        Offset bulbPosition = Offset(wirePosition.dx, wirePosition.dy + hangingHeight);
+
+        // رسم الخيط الذي يعلق اللمبة
+        Paint stringPaint = Paint()
+          ..color = Colors.grey[700]!
+          ..strokeWidth = 1;
+        canvas.drawLine(wirePosition, bulbPosition, stringPaint);
+
+        // تأثير التوهج حول اللمبة
+        Paint glowPaint = Paint()
+          ..color = colors[i % colors.length].withOpacity(opacities[i])
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
+
+        // جسم اللمبة
+        Paint bulbPaint = Paint()
+          ..color = colors[i % colors.length].withOpacity(opacities[i])
+          ..style = PaintingStyle.fill;
+
+        // القاعدة العلوية السوداء لللمبة
+        Paint holderPaint = Paint()..color = Colors.black;
+
+        // رسم التوهج واللمبة
+        canvas.drawCircle(bulbPosition, 12, glowPaint);
+        canvas.drawOval(Rect.fromCenter(center: bulbPosition, width: 12, height: 20), bulbPaint);
+        canvas.drawRect(Rect.fromCenter(center: Offset(bulbPosition.dx, bulbPosition.dy - 10), width: 6, height: 6), holderPaint);
+      }
+    }
+
+    // رسم الفانوس المتأرجح في المنتصف
+    Offset middleWirePosition = pathMetric.getTangentForOffset(pathMetric.length / 2)!.position;
+    Offset lanternTop = Offset(middleWirePosition.dx, middleWirePosition.dy );
+    Offset lanternBottom = Offset(
+      lanternTop.dx + 30 * sin(swingAngle),
+      lanternTop.dy + 45 * cos(swingAngle),
+    );
+
+    // رسم الحبل المعلق للفانوس
+    Paint lanternStringPaint = Paint()
+      ..color = Colors.grey[700]!
+      ..strokeWidth = 2;
+    canvas.drawLine(lanternTop, lanternBottom, lanternStringPaint);
+
+    // رسم الفانوس (استبدله بصورة فعلية لاحقًا)
+    // Paint lanternPaint = Paint()..color = Colors.amber;
+    // canvas.drawOval(Rect.fromCenter(center: lanternBottom, width: 30, height: 50), lanternPaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
 
 class con extends StatelessWidget {

@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:todo/core/resources_manager/Button_Widget.dart';
 import 'package:todo/core/resources_manager/Images_Widget.dart';
 import 'package:todo/core/resources_manager/Text_Widget.dart';
 import 'package:todo/core/resources_manager/constant.dart';
-import 'package:todo/features/Auth/login/view/login_screen.dart';
-import 'package:todo/features/Auth/register/data/model/register_model.dart';
-import 'package:todo/features/Auth/register/logic/register_cubit.dart';
-import 'package:todo/features/Auth/register/logic/register_state.dart';
+import 'package:todo/features/Auth/login/data/model/login_model.dart';
+import 'package:todo/features/Auth/login/manager/login_cubit.dart';
+import 'package:todo/features/Auth/login/manager/login_state.dart';
 import 'package:todo/features/profile/view/profile_screen.dart';
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
-class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
-
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RegisterCubit>(
-      create: (context) => RegisterCubit(),
+    return BlocProvider<LoginCubit>(
+      create: (context) => LoginCubit(),
       child: Builder(
         builder: (context) {
           return SafeArea(
@@ -38,55 +30,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textFormefield(
                       hintText: 'UserName',
                       label: 'UserName',
-                      controller: RegisterCubit.get(context).nameController,
+                      controller: LoginCubit.get(context).LoginNameController,
                     ),
                     const SizedBox(height: 10),
                     textFormefield(
                       hintText: 'Password',
                       label: 'Password',
-                      controller: RegisterCubit.get(context).passwordController,
-                    ),
-                    SizedBox(height: 10),
-                    textFormefield(
-                      hintText: 'Confirm Password',
-                      label: 'Confirm Password',
-                      controller:
-                          RegisterCubit.get(context).ConfirmPasswordController,
+                      controller: LoginCubit.get(context).LoginPasswordController,
                     ),
                     const SizedBox(height: 20),
-                    BlocConsumer<RegisterCubit, RegisterState>(
+                    BlocConsumer<LoginCubit, LoginState>(
                       builder: (context, state) {
-                        var cubit = RegisterCubit.get(context);
+                        var cubit = LoginCubit.get(context);
                         print(state.toString());
-                        if (state is RegisterLoading) {
+                        if (state is LoginLoading) {
                           return CircularProgressIndicator();
                         } else {
                           return Button(
-                            text: 'Register',
+                            text: 'Login',
                             onPress: () {
                               var user = UserModel(
-                                confirmpassword:
-                                    cubit.ConfirmPasswordController.text,
-                                name: cubit.nameController.text,
-                                password: cubit.passwordController.text,
+                                name: cubit.LoginNameController.text,
+                                password: cubit.LoginPasswordController.text,
                               );
-                              cubit.register(user);
+                              cubit.login(u: user);
                             },
                           );
                         }
                       },
                       listener: (context, state) {
-                        if (state is RegisterSuccess) {
+                        if (state is LoginSuccess) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
+                            SnackBar(content: Text("Login Success")),
                           );
+                          
                           Get.to(
-                            LoginScreen(),
+                            ProfileScreen(),
                             duration: Duration(seconds: 3),
                           );
-                        } else if (state is RegisterError) {
+                        } else if (state is LoginError) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
+                            SnackBar(content: Text("Error ${state.message}")),
                           );
                         }
                       },
