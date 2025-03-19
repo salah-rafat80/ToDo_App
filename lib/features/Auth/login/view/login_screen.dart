@@ -8,7 +8,7 @@ import 'package:todo/core/resources_manager/constant.dart';
 import 'package:todo/features/Auth/login/data/model/login_model.dart';
 import 'package:todo/features/Auth/login/manager/login_cubit.dart';
 import 'package:todo/features/Auth/login/manager/login_state.dart';
-import 'package:todo/features/profile/view/profile_screen.dart';
+import 'package:todo/features/Home/views/home_screen_1.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -59,13 +59,14 @@ class LoginScreen extends StatelessWidget {
                         }
                       },
                       listener: (context, state) {
+                        final cubit= LoginCubit.get(context);
                         if (state is LoginSuccess) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Login Success")),
                           );
                           
                           Get.to(
-                            ProfileScreen(),
+                            HomeScreen1(profileName: cubit.LoginNameController.text),
                             duration: Duration(seconds: 3),
                           );
                         } else if (state is LoginError) {

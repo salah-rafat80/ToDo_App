@@ -1,0 +1,44 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/features/Home/data/model/tasks_response_model.dart';
+import 'package:todo/features/Home/data/repo/home_repo.dart';
+import 'package:todo/features/Home/manager/home_state.dart';
+import 'package:todo/features/profile/data/profile_model/profile_model.dart';
+
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit() : super(HomeInitial());
+
+  static HomeCubit get(context) => BlocProvider.of(context);
+
+  Future<void> getTasks() async {
+    try {
+      emit(HomeLoading());
+      await Future.delayed(const Duration(seconds: 2));
+
+      Either<String, List<Tasks>> result = await HomeRepo.getinstance().getTasks();
+
+      result.fold(
+            (failure) => emit(HomeError(message: failure)),
+            (tasks) => emit(HomeSuccess(tasks, null)), // null لـ userData
+      );
+    } catch (e) {
+      emit(HomeError(message: "حدث خطأ غير متوقع: ${e.toString()}"));
+    }
+  }
+
+  Future<void> getUserData() async {
+    try {
+      emit(HomeLoading());
+      await Future.delayed(const Duration(seconds: 2));
+
+      Either<String, String> result = await HomeRepo.getinstance().getUserData();
+
+      result.fold(
+            (failure) => emit(HomeError(message: failure)),
+            (userData) => emit(HomeSuccess([], userData)), // تمرير اسم المستخدم
+      );
+    } catch (e) {
+      emit(HomeError(message: "حدث خطأ غير متوقع: ${e.toString()}"));
+    }
+  }
+}

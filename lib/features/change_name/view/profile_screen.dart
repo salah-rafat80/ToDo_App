@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:todo/core/resources_manager/Text_Widget.dart';
+import 'package:todo/features/Auth/login/view/login_screen.dart';
 import 'package:todo/features/Home/views/home_screen_1.dart';
-import 'package:todo/features/profile/data/profile_model/profile_model.dart';
+import 'package:todo/features/change_name/data/model/response_model.dart';
+import 'package:todo/features/change_name/manager/cubit/change_name_cubit.dart';
+import 'package:todo/features/change_name/manager/cubit/change_name_state.dart';
+// import 'package:todo/features/profile/data/profile_model/profile_model.dart';
 import 'package:todo/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:todo/features/profile/logic/cubit/profile_state.dart';
 import '../../../core/resources_manager/Button_Widget.dart';
@@ -15,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileCubit(),
+      create: (context) => ChangeNameCubit(),
       child: SafeArea(
         child: Scaffold(
           body: Column(
@@ -23,20 +27,20 @@ class ProfileScreen extends StatelessWidget {
             children: [
               MainImage(),
               const SizedBox(height: 20),
-              BlocBuilder<ProfileCubit, ProfileState>(
+              BlocBuilder<ChangeNameCubit, ChangeNameState>(
                 builder: (context, state) {
-                  var cubit = context.watch<ProfileCubit>();
+                  var cubit = context.watch<ChangeNameCubit>();
                   return textFormefield(
-                    hintText: 'Profile Name',
-                    controller: cubit.nameController,
+                    hintText: 'New Profile Name',
+                    controller: cubit.newNameController,
                     label: "Profile Name",
                   );
                 },
               ),
               const SizedBox(height: 40),
-              BlocConsumer<ProfileCubit, ProfileState>(
+              BlocConsumer<ChangeNameCubit, ChangeNameState>(
                 builder: (context, state) {
-                  if (state is ProfileLoadingState) {
+                  if (state is ChangeNameLoading) {
                     return const CircularProgressIndicator();
                   } else {
                     return Builder(
@@ -44,11 +48,13 @@ class ProfileScreen extends StatelessWidget {
                         return Button(
                           text: 'Save',
                           onPress: () {
-                            var cubit = context1.read<ProfileCubit>();
+
+                            var cubit = context1.read<ChangeNameCubit>();
                             var user = UserdataModel(
-                              name: cubit.nameController.text,
+                              name: cubit.newNameController.text,
                             );
-                            cubit.OnSaveProfile(userdata: user);
+                            cubit.changeNameRepo.changeName(newName: user.name!);
+                            Get.to(() => LoginScreen());
                           },
                         );
                       },
@@ -56,9 +62,9 @@ class ProfileScreen extends StatelessWidget {
                   }
                 },
                 listener: (context, state) {
-                  if (state is ProfileSuccessState) {
-                    Get.to(() => HomeScreen1());
-                  } else if (state is ProfileErrorState) {
+                  if (state is ChangeNameSuccess) {
+                    Get.to(() => LoginScreen());
+                  } else if (state is ChangeNameError) {
                     Get.snackbar("Error", "Failed to save profile");
                   }
                 },

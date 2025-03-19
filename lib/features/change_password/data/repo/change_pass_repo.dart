@@ -6,34 +6,33 @@ import 'package:todo/core/resources_manager/network/end_points.dart';
 class ChangePassRepo {
   ChangePassRepo._internal();
 
-  static ChangePassRepo instance = ChangePassRepo._internal();
+  static final ChangePassRepo instance = ChangePassRepo._internal();
 
-  static getinstance() {
+  static ChangePassRepo getInstance() { // Fixed method name
     return instance;
   }
 
-  ApiHelper apiHelper = ApiHelper();
+  final ApiHelper apiHelper = ApiHelper();
 
   Future<Either<String, String>> changePassword({
     required String currentPassword,
     required String newPassword,
     required String newPasswordConfirm,
-
   }) async {
-
     ApiResponse response = await apiHelper.postRequest(
       url: EndPoints.changePassword,
-      data: {"current_password": currentPassword, "new_password": newPassword,
-      "new_password_confirm": newPasswordConfirm},
+      data: {
+        "current_password": currentPassword,
+        "new_password": newPassword,
+        "new_password_confirm": newPasswordConfirm
+      },
       isAuthorized: true,
-
     );
 
-    if (response.status ) {
+    if (response.status) {
       return right(response.message);
-    }else{
+    } else {
       return left(response.message);
     }
-
   }
 }

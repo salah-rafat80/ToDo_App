@@ -13,8 +13,8 @@ import 'package:todo/features/Home/views/home_screen_1.dart';
 import 'package:todo/features/Home/views/home_screen_2.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({super.key});
-
+  const AddTaskScreen({super.key, required this.user});
+ final String user ;
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AddTaskCubit>(
@@ -111,7 +111,7 @@ class AddTaskScreen extends StatelessWidget {
                 listener: (BuildContext context, AddTaskState state) {
                   print(state.toString());
                   if (state is AddTaskSuccess) {
-                    Get.to(HomeScreen1());
+                    Get.to(HomeScreen1(profileName: user,));
                   } else if (state is AddTaskError) {
                     ScaffoldMessenger.of(
                       context,

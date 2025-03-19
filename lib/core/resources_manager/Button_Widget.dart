@@ -53,7 +53,7 @@ class PlusButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(AddTaskScreen());
+        Get.to(AddTaskScreen(user: name!,));
       },
       child: Image(
         image: AssetImage("assets/Icons/PlusIconPro.png"),

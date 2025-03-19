@@ -10,7 +10,6 @@ import 'package:todo/features/Auth/login/view/login_screen.dart';
 import 'package:todo/features/Auth/register/data/model/register_model.dart';
 import 'package:todo/features/Auth/register/logic/register_cubit.dart';
 import 'package:todo/features/Auth/register/logic/register_state.dart';
-import 'package:todo/features/profile/view/profile_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});

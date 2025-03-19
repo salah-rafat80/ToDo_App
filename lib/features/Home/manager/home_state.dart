@@ -12,6 +12,7 @@ class HomeError extends HomeState {
 }
 
 class HomeSuccess extends HomeState {
+
   List<Tasks> tasks;
   HomeSuccess({required this.tasks});
 }
